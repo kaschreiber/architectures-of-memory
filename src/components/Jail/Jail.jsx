@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as THREE from "three";
@@ -6,7 +6,7 @@ import * as dat from "dat.gui";
 import Doors from "./Doors.jsx";
 
 const Jail = () => {
-  const [doorModel, doorLeftModel, base, ceiling, floor, mainDoor, cell01] =
+  const [doorModel, doorLeftModel, base, ceiling, floor, mainDoor, cell01, cell02, cell03, cell04, cell05] =
     useLoader(GLTFLoader, [
       "./door.glb",
       "./door_left.glb",
@@ -14,7 +14,11 @@ const Jail = () => {
       "./ceiling.glb",
       "./floor.glb",
       "./main_door.glb",
-      "./model01.glb",
+      "./cell01.glb",
+      "./model02.glb",
+      "./model03.glb",
+      "./model04.glb",
+      "./model05.glb",
     ]);
   const doorTextures = useLoader(THREE.TextureLoader, [
     "/door_texture.jpg",
@@ -44,38 +48,27 @@ const Jail = () => {
   const groupRef = useRef();
   const guiRef = useRef();
 
-  const doors = useMemo(() => [
-    {
-      position: [0, 0, 0],
-      textureIndex: 0,
-      rotationY: 0,
-    },
-    {
-      position: [0, 0, 0.372],
-      textureIndex: 1,
-      rotationY: 0,
-    },
-    {
-      position: [0, 0, 0.744],
-      textureIndex: 2,
-      rotationY: 0,
-    },
-    {
-      position: [0, 0, 0],
-      textureIndex: 3,
-      rotationY: Math.PI,
-    },
-    {
-      position: [0, 0, 0.384],
-      textureIndex: 4,
-      rotationY: Math.PI,
-    },
-    {
-      position: [0, 0, 0.756],
-      textureIndex: 5,
-      rotationY: Math.PI,
-    },
-  ]);
+  const cell01Ref = useRef();
+
+  // implementation of the GUI
+  useEffect(() => {
+    const gui = new dat.GUI();
+    guiRef.current = gui;
+
+    const folder = gui.addFolder("Jail Settings");
+
+    const cell01Child = cell01Ref.current?.children[0];
+
+    if (!cell01Ref.current) return;
+    folder.add(cell01Child.position, "x", -1, 1, 0.01).name("Cell position X");
+    folder.add(cell01Child.position, "y", -1, 1, 0.01).name("Cell position Y");
+    folder.add(cell01Child.position, "z", -1, 1, 0.01).name("Cell position Z");
+
+    return () => {
+      gui.destroy();
+      guiRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     if (!base?.scene || !ceiling?.scene || !floor?.scene || !mainDoor?.scene)
@@ -128,17 +121,43 @@ const Jail = () => {
 
   return (
     <group ref={groupRef}>
+      {/*add area light*/}
+      <rectAreaLight />
       <Doors
-        doors={doors}
         doorTextures={doorTextures}
         doorModel={doorModel}
         doorLeftModel={doorLeftModel}
       />
       <primitive object={base.scene} scale={1.0} />
-      {/*<primitive object={ceiling.scene} scale={1.0} />*/}
+      <primitive object={ceiling.scene} scale={1.0} />
       <primitive object={floor.scene} scale={1.0} />
       <primitive object={mainDoor.scene} scale={1.0} />
-      <primitive object={cell01.scene} scale={1.0} />
+      <primitive
+        ref={cell01Ref}
+        object={cell01.scene}
+        scale={1.0}
+        position={[0, 0, 0]}
+      />
+      <primitive
+        object={cell02.scene}
+        scale={1.0}
+        position={[0, 0, 0]}
+      />
+      <primitive
+        object={cell03.scene}
+        scale={1.0}
+        position={[0, 0, 0]}
+      />
+      <primitive
+        object={cell04.scene}
+        scale={1.0}
+        position={[0, 0, 0]}
+      />
+      <primitive
+        object={cell05.scene}
+        scale={1.0}
+        position={[0, 0, 0]}
+      />
     </group>
   );
 };

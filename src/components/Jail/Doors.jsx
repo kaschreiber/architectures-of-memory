@@ -1,7 +1,40 @@
 import React, { useEffect, useMemo } from "react";
 import * as THREE from "three";
 
-const Doors = ({ doors, doorTextures, doorModel, doorLeftModel }) => {
+const Doors = ({ doorTextures, doorModel, doorLeftModel }) => {
+  const doors = useMemo(() => [
+    {
+      position: [0, 0, 0],
+      textureIndex: 0,
+      rotationY: 0,
+    },
+    {
+      position: [0, 0, 0.374],
+      textureIndex: 1,
+      rotationY: 0,
+    },
+    {
+      position: [0, 0, 0.747],
+      textureIndex: 2,
+      rotationY: 0,
+    },
+    {
+      position: [0, 0, 0],
+      textureIndex: 3,
+      rotationY: Math.PI,
+    },
+    {
+      position: [0, 0, 0.375],
+      textureIndex: 4,
+      rotationY: Math.PI,
+    },
+    {
+      position: [0, 0, 0.748],
+      textureIndex: 5,
+      rotationY: Math.PI,
+    },
+  ]);
+
   return doors.map((door, index) => {
     const doorClone = useMemo(() => {
       let clone;

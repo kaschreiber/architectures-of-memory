@@ -35,13 +35,13 @@ export default function Experience() {
     <>
       {/*<Perf position="bottom-left" />*/}
       <OrbitControls ref={controlsRef} makeDefault />
-      <Environment files="environment/office.hdr" />
-      <directionalLight
-        castShadow={true}
-        position={[0.1, 5.5, -0.1]}
-        intensity={10}
-        color={"#ffffff"}
-      />
+      {/*<Environment files="environment/office.hdr" />*/}
+      {/*<directionalLight*/}
+      {/*  castShadow={true}*/}
+      {/*  position={[0.1, 5.5, -0.1]}*/}
+      {/*  intensity={10}*/}
+      {/*  color={"#ffffff"}*/}
+      {/*/>*/}
       <Jail />
     </>
   );
