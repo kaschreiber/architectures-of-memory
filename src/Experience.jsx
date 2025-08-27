@@ -1,7 +1,8 @@
-import { Perf } from "r3f-perf";
-import { Environment, OrbitControls } from "@react-three/drei";
+import { PointerLockControls } from "@react-three/drei";
 import Jail from "./components/Jail/Jail.jsx";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import Player from "./components/Player/Player.jsx";
+import { Physics } from "@react-three/rapier";
 
 export default function Experience() {
   const controlsRef = useRef();
@@ -34,15 +35,19 @@ export default function Experience() {
   return (
     <>
       {/*<Perf position="bottom-left" />*/}
-      <OrbitControls ref={controlsRef} makeDefault />
-      {/*<Environment files="environment/office.hdr" />*/}
-      {/*<directionalLight*/}
-      {/*  castShadow={true}*/}
-      {/*  position={[0.1, 5.5, -0.1]}*/}
-      {/*  intensity={10}*/}
-      {/*  color={"#ffffff"}*/}
-      {/*/>*/}
-      <Jail />
+      <PointerLockControls />
+      {/*<OrbitControls ref={controlsRef} makeDefault />*/}
+      {/*      <Environment files="environment/office.hdr" />
+      <directionalLight
+        castShadow={true}
+        position={[0.1, 5.5, -0.1]}
+        intensity={10}
+        color={"#ffffff"}
+      />*/}
+      <Physics>
+        <Jail />
+        <Player />
+      </Physics>
     </>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import * as THREE from "three";
+import { RigidBody } from "@react-three/rapier";
 
 const Doors = ({ doorTextures, doorModel, doorLeftModel }) => {
   const doors = useMemo(() => [
@@ -64,7 +65,11 @@ const Doors = ({ doorTextures, doorModel, doorLeftModel }) => {
       });
     }, [doorClone, door.textureIndex, doorTextures]);
 
-    return <primitive key={index} object={doorClone} scale={1.0} />;
+    return (
+      <RigidBody type="fixed" colliders="trimesh" friction={0} restitution={0}>
+        <primitive key={index} object={doorClone} scale={1.0} />
+      </RigidBody>
+    );
   });
 };
 

@@ -4,22 +4,36 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as THREE from "three";
 import * as dat from "dat.gui";
 import Doors from "./Doors.jsx";
+import { RigidBody } from "@react-three/rapier";
 
 const Jail = () => {
-  const [doorModel, doorLeftModel, base, ceiling, floor, mainDoor, cell01, cell02, cell03, cell04, cell05] =
-    useLoader(GLTFLoader, [
-      "./door.glb",
-      "./door_left.glb",
-      "./base.glb",
-      "./ceiling.glb",
-      "./floor.glb",
-      "./main_door.glb",
-      "./cell01.glb",
-      "./model02.glb",
-      "./model03.glb",
-      "./model04.glb",
-      "./model05.glb",
-    ]);
+  const [
+    doorModel,
+    doorLeftModel,
+    base,
+    ceiling,
+    floor,
+    mainDoor,
+    cell01,
+    cell02,
+    cell03,
+    cell04,
+    cell05,
+    wireframeBase,
+  ] = useLoader(GLTFLoader, [
+    "./door.glb",
+    "./door_left.glb",
+    "./base.glb",
+    "./ceiling.glb",
+    "./floor.glb",
+    "./main_door.glb",
+    "./cell01.glb",
+    "./model02.glb",
+    "./model03.glb",
+    "./model04.glb",
+    "./model05.glb",
+    "./wireframe_base.glb",
+  ]);
   const doorTextures = useLoader(THREE.TextureLoader, [
     "/door_texture.jpg",
     "/door02_texture.jpg",
@@ -46,29 +60,7 @@ const Jail = () => {
     tex.colorSpace = THREE.SRGBColorSpace;
   });
   const groupRef = useRef();
-  const guiRef = useRef();
-
   const cell01Ref = useRef();
-
-  // implementation of the GUI
-  useEffect(() => {
-    const gui = new dat.GUI();
-    guiRef.current = gui;
-
-    const folder = gui.addFolder("Jail Settings");
-
-    const cell01Child = cell01Ref.current?.children[0];
-
-    if (!cell01Ref.current) return;
-    folder.add(cell01Child.position, "x", -1, 1, 0.01).name("Cell position X");
-    folder.add(cell01Child.position, "y", -1, 1, 0.01).name("Cell position Y");
-    folder.add(cell01Child.position, "z", -1, 1, 0.01).name("Cell position Z");
-
-    return () => {
-      gui.destroy();
-      guiRef.current = null;
-    };
-  }, []);
 
   useEffect(() => {
     if (!base?.scene || !ceiling?.scene || !floor?.scene || !mainDoor?.scene)
@@ -128,36 +120,27 @@ const Jail = () => {
         doorModel={doorModel}
         doorLeftModel={doorLeftModel}
       />
-      <primitive object={base.scene} scale={1.0} />
+      <RigidBody type="fixed" colliders="trimesh">
+        <primitive object={base.scene} scale={1.0} />
+      </RigidBody>
+      {/*<primitive object={wireframeBase.scene} scale={1.0} />*/}
       <primitive object={ceiling.scene} scale={1.0} />
-      <primitive object={floor.scene} scale={1.0} />
-      <primitive object={mainDoor.scene} scale={1.0} />
+      <RigidBody type="fixed" colliders="hull">
+        <primitive object={floor.scene} scale={1.0} />
+      </RigidBody>
+      <RigidBody type="fixed" colliders="trimesh" friction={0} restitution={0}>
+        <primitive object={mainDoor.scene} scale={1.0} />
+      </RigidBody>
       <primitive
         ref={cell01Ref}
         object={cell01.scene}
         scale={1.0}
         position={[0, 0, 0]}
       />
-      <primitive
-        object={cell02.scene}
-        scale={1.0}
-        position={[0, 0, 0]}
-      />
-      <primitive
-        object={cell03.scene}
-        scale={1.0}
-        position={[0, 0, 0]}
-      />
-      <primitive
-        object={cell04.scene}
-        scale={1.0}
-        position={[0, 0, 0]}
-      />
-      <primitive
-        object={cell05.scene}
-        scale={1.0}
-        position={[0, 0, 0]}
-      />
+      <primitive object={cell02.scene} scale={1.0} position={[0, 0, 0]} />
+      <primitive object={cell03.scene} scale={1.0} position={[0, 0, 0]} />
+      <primitive object={cell04.scene} scale={1.0} position={[0, 0, 0]} />
+      <primitive object={cell05.scene} scale={1.0} position={[0, 0, 0]} />
     </group>
   );
 };
