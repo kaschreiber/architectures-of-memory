@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+    --font-nothing:"Nothing You Could Do", "cursive";
+    --font-ibm: "IBM Plex Sans", "sans-serif";
+    --font-shadows: "Shadows Into Light", "cursive";
+    --font-animatic: "Amatic SC", "sans-serif";
+    --font-rock: "Rock Salt", "cursive";
+    --color-offwhite: #E7ECEF;
+    --color-darkblue: #1B2430;
+    --color-midblue: #274C77;
+    --color-lightblue: #6096BA;
+    --color-lighterblue: #A3CEF1;
+    --color-beige: #8B8C89;
+    --color-offblack: #2E2E2E;
+}
+
+.flip-card {
+    perspective: 1000px;
+}
+
+.flip-card-inner {
+    position: absolute;
+    transform-style: preserve-3d;
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    backface-visibility: hidden;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+
+#root {
+    width: 100vw;
+    height: 100vh;
+}
+
+body {
+    margin: 0;
+}
